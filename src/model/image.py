@@ -19,19 +19,17 @@ class Tile(object):
     
 
     def save(self, db):
-        # Save data to _bytes!!!
-        with db.connection as con:
-            con.execute(
-                f"INSERT INTO {Tile._table} VALUES ({self.key}, {self._bytes}, {self.x}, {self.y})"
-            )
+        self._bytes = self.data.tobytes()
+        db.execute(
+            f"INSERT INTO {Tile._table} VALUES ({self.key}, {self._bytes}, {self.x}, {self.y})"
+        )
         return
     
     @staticmethod
     def _datainit(db):
-        with db.connection as con:
-            con.execute(
-                f"CREATE TABLE IF NOT EXISTS {Tile._table} (key PIRMARY KEY, bytes, x INTEGER, y INTEGER)"
-            )
+        db.execute(
+            f"CREATE TABLE IF NOT EXISTS {Tile._table} (key PIRMARY KEY ON CONFLICT REPLACE, bytes, x INTEGER, y INTEGER)"
+        )
         return
 
 

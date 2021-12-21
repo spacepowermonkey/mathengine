@@ -4,6 +4,7 @@ from uuid import uuid4
 from .obj import Obj
 from .arrow import Arrow
 from .image import Image
+
 from ._toxic.db import DB
 
 
@@ -33,8 +34,7 @@ class Model(object):
 
     def object(self, data):
         obj = Obj(self.size, data)
-        obj.save()
-
+        obj.save(self._data)
         self.size +=1
         return obj
     

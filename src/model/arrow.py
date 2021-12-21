@@ -9,8 +9,6 @@ class ArrowType(object):
 
 
 class Arrow(object):
-    _table : str = ""
-
     def __init__(self, start : int, end : int, data : Any):
         self.start = start
         self.end = end

@@ -12,16 +12,14 @@ class Obj(object):
 
 
     def save(self, db):
-        with db.connection as con:
-            con.execute(
-                f"INSERT INTO {Obj._table} VALUES ({self.key}, {self.bytes}, {self.x}, {self.y})"
-            )
+        db.execute(
+            f"INSERT INTO {Obj._table} VALUES ({self.key}, {self.data})"
+        )
         return
 
     @staticmethod
     def _datainit(db):
-        with db.connection as con:
-            con.execute(
-                f"CREATE TABLE IF NOT EXISTS {Obj._table} (key PIRMARY KEY, data)"
-            )
+        db.execute(
+            f"CREATE TABLE IF NOT EXISTS {Obj._table} (key PIRMARY KEY ON CONFLICT REPLACE, data)"
+        )
         return
