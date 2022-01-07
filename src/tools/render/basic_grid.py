@@ -1,3 +1,5 @@
+import cairosvg
+
 from dataclasses import dataclass
 from typing import Tuple
 
@@ -61,8 +63,13 @@ def render(model, name, path):
     svg += obj_svg + arr_svg
     svg += '</svg>'
 
-    with open(f'{path}/{name}.svg', 'w') as handle:
+    svg_path = f'{path}/{name}.svg'
+    jpeg_path = f'{path}/{name}.jpeg'
+
+    with open(svg_path, 'w') as handle:
         handle.write(svg)
 
-    # convert to JPEG
+    cairosvg.svg2png(
+        fileobj=open(svg_path, 'rb'), write_to=jpeg_path
+    )
     return
