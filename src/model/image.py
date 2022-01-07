@@ -2,6 +2,10 @@ import numpy
 
 
 
+from .arrow import Arrow, ArrowType
+
+
+
 class Tile(object):
     _table:     str = "tiles"
     _stride:    int = 64
@@ -77,3 +81,18 @@ class Image(object):
         tile[dx,dy] = data
         return
     
+    def to_arrows(self):
+        arrows = []
+
+        for tile in self._tiles:
+            base_x = tile.x
+            base_y = tile.y
+            for x in range(Tile._stride):
+                for y in range(Tile._stride):
+                    if tile[x,y] == ArrowType.NONE:
+                        continue
+                    arrows.append(
+                        Arrow(base_x + x, base_y + y, tile[x,y])
+                    )
+
+        return arrows

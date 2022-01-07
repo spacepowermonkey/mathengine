@@ -16,6 +16,20 @@ class Obj(object):
             f"INSERT INTO {Obj._table} VALUES ({self.key}, {self.data})"
         )
         return
+    
+    @staticmethod
+    def getall(self, db):
+        objs = []
+
+        db.execute(
+            f"SELECT * FROM {Obj._table}"
+        )
+        rows = db.fetchall()
+        for row in rows:
+            objs.append(Obj(row[0], row[1]))
+
+        return objs
+
 
     @staticmethod
     def _datainit(db):

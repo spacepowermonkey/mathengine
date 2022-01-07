@@ -3,9 +3,10 @@ from typing import Any
 
 
 class ArrowType(object):
-    equality = 0
-    inclusion = 1
-    restriction = -1
+    NONE        = 0
+    equality    = 1
+    inclusion   = 2
+    restriction = 3
 
 
 class Arrow(object):

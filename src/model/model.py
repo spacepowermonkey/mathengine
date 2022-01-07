@@ -46,7 +46,7 @@ class Model(object):
 
 
     def objects(self):
-        return iterator
+        return Obj.getall(self._data)
     
     def arrows(self):
-        return iterator
+        return self.image.to_arrows()

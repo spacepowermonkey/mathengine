@@ -31,7 +31,7 @@ class Shape(object):
         for obj in self.model.objects():
             result_data = data_update(obj.data) if data_update is not None else obj.data
             result.model.object(result_data)
-        for obj in other.object():
+        for obj in other.model.objects():
             result_data = data_update(obj.data) if data_update is not None else obj.data
             result.model.object(result_data)
 
