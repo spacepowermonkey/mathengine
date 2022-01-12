@@ -70,6 +70,6 @@ def render(model, name, path):
         handle.write(svg)
 
     cairosvg.svg2png(
-        bytestring=open(svg_path, 'rb'), write_to=jpeg_path
+        bytestring=open(svg_path, 'rb').read(), write_to=jpeg_path
     )
     return
