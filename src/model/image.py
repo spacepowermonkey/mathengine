@@ -78,7 +78,7 @@ class Image(object):
             tile = Tile(x,y)
             self._tiles[key] = tile
         
-        tile[dx,dy] = data
+        tile.data[dx,dy] = data
         return
     
     def to_arrows(self):
@@ -89,10 +89,10 @@ class Image(object):
             base_y = tile.y
             for x in range(Tile._stride):
                 for y in range(Tile._stride):
-                    if tile[x,y] == ArrowType.NONE:
+                    if tile.data[x,y] == ArrowType.NONE:
                         continue
                     arrows.append(
-                        Arrow(base_x + x, base_y + y, tile[x,y])
+                        Arrow(base_x + x, base_y + y, tile.data[x,y])
                     )
 
         return arrows
