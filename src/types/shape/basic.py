@@ -56,7 +56,7 @@ class Shape(object):
 
         for obj in self.model.objects():
             # Add a copy shifted by that dimensionality for each cell.
-            result.__add__(other, data_update=lambda x: x + obj.data)
+            result = result.__add__(other, data_update=lambda x: x + obj.data)
         
         for arr in self.model.arrows():
             # Add an arrow between matched cells in end-blocks.
