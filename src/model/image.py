@@ -84,7 +84,7 @@ class Image(object):
     def to_arrows(self):
         arrows = []
 
-        for tile in self._tiles:
+        for tile in self._tiles.values():
             base_x = tile.x
             base_y = tile.y
             for x in range(Tile._stride):
