@@ -89,7 +89,7 @@ class Model:
         new_obj = Obj(self.size, data)
         self._objs.append(new_obj)
         self.size += 1
-        return
+        return new_obj
     
     def Arrow(self, start, end, data):
         self._image.mark(start, end, data)
