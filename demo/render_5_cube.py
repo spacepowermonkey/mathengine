@@ -4,7 +4,13 @@ from mathengine.tools.render.basic_grid import render
 
 
 def main():
-    render(Cube(5).model, "5-cube", "/data")
+    model = Cube(5).model
+
+    print(model.size)
+    print(model.complexity)
+
+    render(model, "5-cube", "/data")
+    
     return
 
 

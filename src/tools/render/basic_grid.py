@@ -39,6 +39,7 @@ def obj_render_column(obj):
     return f'<text x="{col_x}" y="{Const.text_indent}">{obj.key}</text>'
 
 def obj_render(obj):
+    print("RENDERING!")
     return f'<g transform="translate({Const.row_offset[0], Const.row_offset[1]})">{obj_render_row(obj)}</g>' + \
             f'<g transform="translate({Const.row_offset[0], Const.row_offset[1]})">{obj_render_column(obj)}</g>'
 
@@ -64,12 +65,12 @@ def render(model, name, path):
     svg += '</svg>'
 
     svg_path = f'{path}/{name}.svg'
-    jpeg_path = f'{path}/{name}.jpeg'
+    png_path = f'{path}/{name}.png'
 
     with open(svg_path, 'w') as handle:
         handle.write(svg)
 
     cairosvg.svg2png(
-        bytestring=open(svg_path, 'rb').read(), write_to=jpeg_path
+        bytestring=open(svg_path, 'rb').read(), write_to=png_path
     )
     return
