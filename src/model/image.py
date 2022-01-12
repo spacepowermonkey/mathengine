@@ -32,7 +32,7 @@ class Tile(object):
     @staticmethod
     def _datainit(db):
         db.execute(
-            f"CREATE TABLE IF NOT EXISTS {Tile._table} (key PIRMARY KEY ON CONFLICT REPLACE, bytes, x INTEGER, y INTEGER)"
+            f"CREATE TABLE IF NOT EXISTS {Tile._table} (key PRIMARY KEY ON CONFLICT REPLACE, bytes, x INTEGER, y INTEGER)"
         )
         return
 

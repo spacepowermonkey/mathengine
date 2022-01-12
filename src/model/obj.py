@@ -34,6 +34,6 @@ class Obj(object):
     @staticmethod
     def _datainit(db):
         db.execute(
-            f"CREATE TABLE IF NOT EXISTS {Obj._table} (key PIRMARY KEY ON CONFLICT REPLACE, data)"
+            f"CREATE TABLE IF NOT EXISTS {Obj._table} (key PRIMARY KEY ON CONFLICT REPLACE, data)"
         )
         return
