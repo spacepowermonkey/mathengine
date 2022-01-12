@@ -14,3 +14,6 @@ class DB(object):
                 statement
             )
         return
+    
+    def fetchall(self):
+        return self.connection.fetchall()
