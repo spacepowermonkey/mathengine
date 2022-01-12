@@ -42,7 +42,7 @@ class Shape(object):
                 arr.end, 
                 arr.data
             )
-        for arr in other.arrows():
+        for arr in other.model.arrows():
             result.model.arrow(
                 arr.start + self.model.size, 
                 arr.end + self.model.size, 
