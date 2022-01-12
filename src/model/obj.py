@@ -21,10 +21,9 @@ class Obj(object):
     def getall(db):
         objs = []
 
-        db.execute(
-            f"SELECT * FROM {Obj._table}"
+        rows = db.execute(
+            f"SELECT * FROM {Obj._table}", fetch=True
         )
-        rows = db.fetchall()
         for row in rows:
             objs.append(Obj(row[0], row[1]))
 

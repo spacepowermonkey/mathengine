@@ -8,12 +8,11 @@ class DB(object):
         self.connection = sql.connect(self.filename)
         return
     
-    def execute(self, statement):
-        with self.connection as con:
-            con.execute(
+    def execute(self, statement, fetch=False):
+        with self.connection.cursor() as cur:
+            cur.execute(
                 statement
             )
+            if fetch:
+                return cur.fetchall()
         return
-    
-    def fetchall(self):
-        return self.connection.fetchall()
