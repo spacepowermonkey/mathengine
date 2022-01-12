@@ -10,17 +10,17 @@ class Shape(object):
 
     def cell(self, dimension : int):
         cell = self.model.Obj(dimension)
-        self.model.Arrow(cell.key, cell.key, ArrowType.equality)
+        self.model.Arrow(cell.idx, cell.idx, ArrowType.equality)
         return cell
 
     def glue(self, a, b):
-        self.model.Arrow(a.key, b.key, ArrowType.inclusion)
-        self.model.Arrow(b.key, a.key, ArrowType.restriction)
+        self.model.Arrow(a.idx, b.idx, ArrowType.inclusion)
+        self.model.Arrow(b.idx, a.idx, ArrowType.restriction)
         return
 
     def equate(self, a, b):
-        self.model.Arrow(a.key, b.key, ArrowType.equality)
-        self.model.Arrow(b.key, a.key, ArrowType.equality)
+        self.model.Arrow(a.idx, b.idx, ArrowType.equality)
+        self.model.Arrow(b.idx, a.idx, ArrowType.equality)
         return
     
 
@@ -63,7 +63,7 @@ class Shape(object):
             d_start = arr.start * other.model.size
             d_end = arr.start * other.model.size
             for obj in other.model.objects():
-                result.model.arrow(obj.key + d_start, obj.key + d_end, obj.data)
+                result.model.arrow(obj.idx + d_start, obj.idx + d_end, obj.data)
 
         return result
 
