@@ -9,18 +9,18 @@ class Shape(object):
 
 
     def cell(self, dimension : int):
-        cell = self.model.object(dimension)
-        self.model.arrow(cell.key, cell.key, ArrowType.equality)
+        cell = self.model.Obj(dimension)
+        self.model.Arrow(cell.key, cell.key, ArrowType.equality)
         return cell
 
     def glue(self, a, b):
-        self.model.arrow(a.key, b.key, ArrowType.inclusion)
-        self.model.arrow(b.key, a.key, ArrowType.restriction)
+        self.model.Arrow(a.key, b.key, ArrowType.inclusion)
+        self.model.Arrow(b.key, a.key, ArrowType.restriction)
         return
 
     def equate(self, a, b):
-        self.model.arrow(a.key, b.key, ArrowType.equality)
-        self.model.arrow(b.key, a.key, ArrowType.equality)
+        self.model.Arrow(a.key, b.key, ArrowType.equality)
+        self.model.Arrow(b.key, a.key, ArrowType.equality)
         return
     
 
@@ -30,20 +30,20 @@ class Shape(object):
         # For every object in our model, copy it over.
         for obj in self.model.objects():
             result_data = data_update(obj.data) if data_update is not None else obj.data
-            result.model.object(result_data)
+            result.model.Obj(result_data)
         for obj in other.model.objects():
             result_data = data_update(obj.data) if data_update is not None else obj.data
-            result.model.object(result_data)
+            result.model.Obj(result_data)
 
         # Copy the arrows, with offset for the second model.
         for arr in self.model.arrows():
-            result.model.arrow(
+            result.model.Arrow(
                 arr.start, 
                 arr.end, 
                 arr.data
             )
         for arr in other.model.arrows():
-            result.model.arrow(
+            result.model.Arrow(
                 arr.start + self.model.size, 
                 arr.end + self.model.size, 
                 arr.data
