@@ -45,7 +45,7 @@ class Tile(object):
     def make_key(x, y):
         tile_x = Tile.find_base(x)
         tile_y = Tile.find_base(y)
-        return f"tile-{tile_x:d.6}-{tile_y:d.6}"
+        return f"tile-{tile_x:.6d}-{tile_y:.6d}"
 
 
 
