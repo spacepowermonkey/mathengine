@@ -31,12 +31,12 @@ class Const:
 
 
 def obj_render_row(obj):
-    row_y = obj.key * Const.row_height + Const.text_indent
-    return f'<text x="{Const.text_indent}" y="{row_y}">{obj.key}</text><text x="{Const.text_indent+Const.row_key_width}" y="{row_y}">{obj.data}</text>'
+    row_y = obj.idx * Const.row_height + Const.text_indent
+    return f'<text x="{Const.text_indent}" y="{row_y}">{obj.idx}</text><text x="{Const.text_indent+Const.row_key_width}" y="{row_y}">{obj.data}</text>'
 
 def obj_render_column(obj):
-    col_x = obj.key * Const.column_width + Const.text_indent
-    return f'<text x="{col_x}" y="{Const.text_indent}">{obj.key}</text>'
+    col_x = obj.idx * Const.column_width + Const.text_indent
+    return f'<text x="{col_x}" y="{Const.text_indent}">{obj.idx}</text>'
 
 def obj_render(obj):
     print("RENDERING!")
