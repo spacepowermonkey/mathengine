@@ -31,7 +31,7 @@ class Tile:
         self.x = x
         self.y = y
 
-        self._data = numpy.zeros((Image._stride, Image._stride), dtype=numpy.byte)
+        self._data = numpy.zeros((Image.STRIDE, Image.STRIDE), dtype=numpy.byte)
         return
 
     def __setitem__(self, key, item):
