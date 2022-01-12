@@ -9,7 +9,8 @@ class DB(object):
         return
     
     def execute(self, statement, fetch=False):
-        with self.connection.cursor() as cur:
+        with self.connection as con:
+            cur = con.cursor()
             cur.execute(
                 statement
             )
