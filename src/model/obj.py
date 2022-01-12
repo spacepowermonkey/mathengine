@@ -18,7 +18,7 @@ class Obj(object):
         return
     
     @staticmethod
-    def getall(self, db):
+    def getall(db):
         objs = []
 
         db.execute(
