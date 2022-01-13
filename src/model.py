@@ -35,7 +35,7 @@ class Tile:
         return
 
     def __setitem__(self, key, item):
-        self._data[key], item
+        self._data[key] = item
     
     def __getitem__(self, key):
         return self._data[key]
@@ -61,6 +61,7 @@ class Image:
             tile = Tile(bx, by)
             self._tiles[(bx,by)] = tile
         tile[dx,dy] = data
+        print(f"Mark @{dx},{dy} : {data} / {tile[dx,dy]}")
         return
     
     def to_arrows(self):
