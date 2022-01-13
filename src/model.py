@@ -61,16 +61,12 @@ class Image:
             tile = Tile(bx, by)
             self._tiles[(bx,by)] = tile
         tile[dx,dy] = data
-        print(f"Mark @{dx},{dy} : {data} / {tile[dx,dy]}")
         return
     
     def to_arrows(self):
-        print(f"Getting arrows:")
         arrows = []
         tiles = self._tiles.values()
-        print(f"... detected {len(tiles)} tiles")
         for tile in tiles:
-            print("... working on tile ({tile.x},{tile.y})")
             for x in range(Image.STRIDE):
                 for y in range(Image.STRIDE):
                     data = tile[x,y]
@@ -80,7 +76,6 @@ class Image:
                     arrows.append(
                         Arrow(x, y, tile[x,y])
                     )
-        print(f"Returning arrows: {arrows}")
         return arrows
 
 
