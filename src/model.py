@@ -73,6 +73,7 @@ class Image:
                     arrows.append(
                         Arrow(x, y, tile[x,y])
                     )
+        print(f"Returning arrows: {arrows}")
         return arrows
 
 
