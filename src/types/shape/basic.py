@@ -61,7 +61,7 @@ class Shape(object):
         for arr in self.model.arrows():
             # Add an arrow between matched cells in end-blocks.
             d_start = arr.start * other.model.size
-            d_end = arr.start * other.model.size
+            d_end = arr.end * other.model.size
             for obj in other.model.objects():
                 result.model.arrow(obj.idx + d_start, obj.idx + d_end, obj.data)
 
