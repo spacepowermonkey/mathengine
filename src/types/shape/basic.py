@@ -63,7 +63,7 @@ class Shape(object):
             d_start = arr.start * other.model.size
             d_end = arr.end * other.model.size
             for obj in other.model.objects():
-                result.model.Arrow(obj.idx + d_start, obj.idx + d_end, obj.data)
+                result.model.Arrow(obj.idx + d_start, obj.idx + d_end, arr.data)
 
         return result
 
