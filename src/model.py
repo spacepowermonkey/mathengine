@@ -64,10 +64,16 @@ class Image:
         return
     
     def to_arrows(self):
+        print(f"Getting arrows:")
         arrows = []
-        for tile in self._tiles.values():
+        tiles = self._tiles.values()
+        print(f"... detected {len(tiles)} tiles")
+        for tile in tiles:
+            print("... working on tile ({tile.x},{tile.y})")
             for x in range(Image.STRIDE):
                 for y in range(Image.STRIDE):
+                    data = tile[x,y]
+                    print(f"... ... @{x},{y} : {data}")
                     if tile[x,y] == ArrowType.NONE:
                         continue
                     arrows.append(
