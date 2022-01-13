@@ -50,6 +50,7 @@ def render(model, name, path, render_data=False):
     svg_height = array_width + Const.header_height
 
     svg = f'<svg width="{svg_width}" height="{svg_height}" viewbox="0 0 {svg_width} {svg_height}" xmlns="http://www.w3.org/2000/svg">'
+    svg += f'<rect width="100%" height="100%" fill="black" />'
 
     obj_svg, arr_svg = mmap( 
         model, obj_render, "", arr_render, ""
