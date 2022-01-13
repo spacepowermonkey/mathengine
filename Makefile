@@ -13,7 +13,7 @@ render: docker-mathengine
 
 	docker run --name mathengine \
 	--mount type=volume,src=mathengine-data,dst="/data" \
-	zmgsabstract/mathengine python3 -m demo.render_5_cube
+	zmgsabstract/mathengine python3 -m demo.render_5_cubes
 
 	docker cp -a mathengine:/data/ ./render/
 
