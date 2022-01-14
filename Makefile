@@ -2,7 +2,7 @@ clean:
 	echo "\n\nCLEANING OUT DOCKER RESOURCES!\n\n"
 	- docker ps -aq | xargs docker rm -f
 	- docker images -aq | xargs docker rmi -f
-	- docker volumes ls -q | xargs docker volume rm
+	- docker volume ls -q | xargs docker volume rm
 	echo "\n\nDESTROYED DOCKER RESOURCES!\n\n"
 
 docker-mathengine:
