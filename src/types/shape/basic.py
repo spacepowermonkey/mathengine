@@ -133,8 +133,8 @@ class Loop(Shape):
         super().__init__()
 
         self.start = self.cell(0)
-        self.end = self.cell(0)
         self.middle = self.cell(1)
+        self.end = self.cell(0)
 
         self.glue(self.start, self.middle)
         self.glue(self.end, self.middle)
