@@ -78,7 +78,7 @@ class Shape(object):
     def __sub__(self, other):
         result = Shape()
         for obj in self.model.objects():
-            result.Obj(obj.data)
+            result.model.Obj(obj.data)
         
         for arr in self.model.arrows():
             try:
