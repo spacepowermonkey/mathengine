@@ -80,6 +80,18 @@ class Image:
         return arrows
 
 
+    def __getitem__(self, key):
+        x = key[0]
+        y = key[1]
+
+        bx = x // Image.STRIDE
+        by = y // Image.STRIDE
+        dx = x % Image.STRIDE
+        dy = y % Image.STRIDE
+
+        return self._tiles[(bx,by)][dx,dy]
+
+
 
 class Model:
     def __init__(self):
@@ -101,6 +113,13 @@ class Model:
         self._image.mark(start, end, data)
         self.complexity += 1
         return Arrow(start, end, data)
+
+
+    def get(self, x, y=None):
+        if y is None:
+            return self._objs[x]
+        else:
+            return self._image[(x,y)]
 
 
     def objects(self):

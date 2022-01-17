@@ -74,6 +74,36 @@ class Shape(object):
             result = self * result
 
         return result
+    
+    def __sub__(self, other):
+        result = Shape()
+        for obj in self.model.objects():
+            result.Obj(obj.data)
+        
+        for arr in self.model.arrows():
+            try:
+                other_arr = other.model.get(arr.start, arr.end) 
+
+                # If they exactly match, remove the arrow entirely.
+                if arr.data == other_arr.data:
+                    continue
+
+                # If the other arrow is of type EQ, then remove always.
+                if other_arr.data == ArrowType.equality:
+                    continue
+
+                # If self is equality and the other arrow exists, subtract.
+                if arr.data == ArrowType.equality and other_arr.data == ArrowType.inclusion:
+                    result.Arrow(arr.start, arr.end, ArrowType.restriction)
+                if arr.data == ArrowType.equality and other_arr.data == ArrowType.restriction:
+                    result.Arrow(arr.start, arr.end, ArrowType.inclusion)
+            
+            # If the arrow is NONE or doesn't exist, copy the self arrow to the result.
+            except KeyError:
+                pass
+            result.Arrow(arr.start, arr.end, arr.data)
+        
+        return result
 
 
 
