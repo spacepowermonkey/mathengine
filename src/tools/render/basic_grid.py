@@ -16,8 +16,8 @@ class Const:
     point_width = 2 * (point_radius + 1)
 
 
-    header_height = 100
-    header_width = 100
+    header_height = 0
+    header_width = 0
 
 
 
