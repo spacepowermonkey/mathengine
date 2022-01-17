@@ -67,14 +67,15 @@ class Image:
         arrows = []
         tiles = self._tiles.values()
         for tile in tiles:
+            dx = tile.x * Image.STRIDE
+            dy = tile.y * Image.STRIDE
             for x in range(Image.STRIDE):
                 for y in range(Image.STRIDE):
                     data = tile[x,y]
-                    print(f"... ... @{x},{y} : {data}")
-                    if tile[x,y] == ArrowType.NONE:
+                    if data == ArrowType.NONE:
                         continue
                     arrows.append(
-                        Arrow(x, y, tile[x,y])
+                        Arrow(x+dx, y+dy, data)
                     )
         return arrows
 
