@@ -38,7 +38,7 @@ def arr_color(arr):
 def arr_render(arr):
     cx = Const.header_width + Const.point_width * (arr.start + 0.5)
     cy = Const.header_height + Const.point_width * (arr.end + 0.5)
-    svg = f'<circle cx="{cx}" cy="{cy}" r="{Const.point_radius}" stroke="None" fill="{arr_color(arr)}"/>'
+    svg = f'  <circle id="{arr.start}-{arr.end}" cx="{cx}" cy="{cy}" r="{Const.point_radius}" stroke="None" fill="{arr_color(arr)}"/>\n'
     return svg
 
 
@@ -49,8 +49,8 @@ def render(model, name, path, render_data=False):
     svg_width = array_width + (Const.data_width if render_data else 0) + Const.header_width
     svg_height = array_width + Const.header_height
 
-    svg = f'<svg width="{svg_width}" height="{svg_height}" viewbox="0 0 {svg_width} {svg_height}" xmlns="http://www.w3.org/2000/svg">'
-    svg += f'<rect width="100%" height="100%" fill="black" />'
+    svg = f'<svg width="{svg_width}" height="{svg_height}" viewbox="0 0 {svg_width} {svg_height}" xmlns="http://www.w3.org/2000/svg">\n'
+    svg += f'<rect width="100%" height="100%" fill="black" />\n\n'
 
     obj_svg, arr_svg = mmap( 
         model, obj_render, "", arr_render, ""
