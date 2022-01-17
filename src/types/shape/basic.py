@@ -94,14 +94,14 @@ class Shape(object):
 
                 # If self is equality and the other arrow exists, subtract.
                 if arr.data == ArrowType.equality and other_arr.data == ArrowType.inclusion:
-                    result.Arrow(arr.start, arr.end, ArrowType.restriction)
+                    result.model.Arrow(arr.start, arr.end, ArrowType.restriction)
                 if arr.data == ArrowType.equality and other_arr.data == ArrowType.restriction:
-                    result.Arrow(arr.start, arr.end, ArrowType.inclusion)
+                    result.model.Arrow(arr.start, arr.end, ArrowType.inclusion)
             
             # If the arrow is NONE or doesn't exist, copy the self arrow to the result.
             except KeyError:
                 pass
-            result.Arrow(arr.start, arr.end, arr.data)
+            result.model.Arrow(arr.start, arr.end, arr.data)
         
         return result
 
