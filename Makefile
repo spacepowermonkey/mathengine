@@ -2,18 +2,37 @@ clean:
 	echo "\n\nCLEANING OUT DOCKER RESOURCES!\n\n"
 	- docker ps -aq | xargs docker rm -f
 	- docker images -aq | xargs docker rmi -f
-	- docker volumes ls -q | xargs docker volume rm
+	- docker volume ls -q | xargs docker volume rm
 	echo "\n\nDESTROYED DOCKER RESOURCES!\n\n"
+
+
 
 docker-mathengine:
 	docker build -t zmgsabstract/mathengine .
 
-render: docker-mathengine
+
+
+####	D E M O S
+demo-5cubes: docker-mathengine
 	echo "\n\nSTARTING MATH ENGINE\n\n"
 
 	docker run --name mathengine \
 	--mount type=volume,src=mathengine-data,dst="/data" \
-	zmgsabstract/mathengine python3 -m demo.render_5_cube
+	zmgsabstract/mathengine python3 -m demo.render_5_cubes
+
+	docker cp -a mathengine:/data/ ./render/
+
+	echo "\n\nEXECUTION SUCCESSFUL!\n\n"
+
+
+
+####	P A P E R S
+paper_shapes_as_di: docker-mathengine
+	echo "\n\nSTARTING MATH ENGINE\n\n"
+
+	docker run --name mathengine \
+	--mount type=volume,src=mathengine-data,dst="/data" \
+	zmgsabstract/mathengine python3 -m papers.shapes_as_digital_images
 
 	docker cp -a mathengine:/data/ ./render/
 

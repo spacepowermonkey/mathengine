@@ -4,7 +4,9 @@ from mathengine.tools.render.basic_grid import render
 
 
 def main():
-    render(Cube(5).model, "5-cube")
+    for i in range(6): # This renders 0 (the point) to 5 (the 5-cube).
+        model = Cube(i).model
+        render(model, f"{i}-cube", "/data")    
     return
 
 

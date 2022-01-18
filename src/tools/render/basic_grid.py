@@ -1,61 +1,56 @@
 import cairosvg
 
 from dataclasses import dataclass
-from typing import Tuple
 
 
 
 from ..map import map as mmap
+from ...model import ArrowType
 
 
 
 @dataclass
 class Const:
-    text_indent : int = 2
-
-    row_height : int = 20
-    row_key_width : int = 20
-    row_data_width : int = 80
-    row_width : int = row_key_width + row_data_width
-
-    column_height : int = 20
-    column_width : int = 20
-
-    array_height : int = row_height
-    array_width : int = column_width
-
-    row_offset : Tuple[int,int] = (0, column_height)
-    column_offset : Tuple[int,int] = (row_width, 0)
-    array_offset : Tuple[int,int] = (row_width, column_height)
+    data_width = 200
+    point_radius = 4
+    point_width = 2 * (point_radius + 1)
 
 
+    header_height = 0
+    header_width = 0
 
-def obj_render_row(obj):
-    row_y = obj.key * Const.row_height + Const.text_indent
-    return f'<text x="{Const.text_indent}" y="{row_y}">{obj.key}</text><text x="{Const.text_indent+Const.row_key_width}" y="{row_y}">{obj.data}</text>'
 
-def obj_render_column(obj):
-    col_x = obj.key * Const.column_width + Const.text_indent
-    return f'<text x="{col_x}" y="{Const.text_indent}">{obj.key}</text>'
 
 def obj_render(obj):
-    return f'<g transform="translate({Const.row_offset[0], Const.row_offset[1]})">{obj_render_row(obj)}</g>' + \
-            f'<g transform="translate({Const.row_offset[0], Const.row_offset[1]})">{obj_render_column(obj)}</g>'
-
-
-def arr_render(arr):
     svg = ""
     return svg
 
 
+ARROW_COLORS = {
+    ArrowType.NONE          : '#000000',
+    ArrowType.equality      : '#785EF0',
+    ArrowType.inclusion     : '#DC267F',
+    ArrowType.restriction   : '#648FFF',
+}
+def arr_color(arr):
+    return ARROW_COLORS[arr.data]
 
-def render(model, name, path):
-    column_total_width = model.size * Const.column_width
-    row_total_height = model.size * Const.row_height
-    svg_width = Const.row_width + column_total_width
-    svg_height = row_total_height + Const.column_height
+def arr_render(arr):
+    cx = Const.header_width + Const.point_width * (arr.start + 0.5)
+    cy = Const.header_height + Const.point_width * (arr.end + 0.5)
+    svg = f'  <circle id="{arr.start}-{arr.end}" cx="{cx}" cy="{cy}" r="{Const.point_radius}" stroke="None" fill="{arr_color(arr)}"/>\n'
+    return svg
 
-    svg = f'<svg width="{svg_width}" height="{svg_height}" viewbox="0 0 {svg_width} {svg_height}" xmlns="http://www.w3.org/2000/svg">'
+
+
+def render(model, name, path, render_data=False):
+    array_width = model.size * Const.point_width
+
+    svg_width = array_width + (Const.data_width if render_data else 0) + Const.header_width
+    svg_height = array_width + Const.header_height
+
+    svg = f'<svg width="{svg_width}" height="{svg_height}" viewbox="0 0 {svg_width} {svg_height}" xmlns="http://www.w3.org/2000/svg">\n'
+    svg += f'<rect width="100%" height="100%" fill="black" />\n\n'
 
     obj_svg, arr_svg = mmap( 
         model, obj_render, "", arr_render, ""
@@ -64,12 +59,12 @@ def render(model, name, path):
     svg += '</svg>'
 
     svg_path = f'{path}/{name}.svg'
-    jpeg_path = f'{path}/{name}.jpeg'
+    png_path = f'{path}/{name}.png'
 
     with open(svg_path, 'w') as handle:
         handle.write(svg)
 
     cairosvg.svg2png(
-        fileobj=open(svg_path, 'rb'), write_to=jpeg_path
+        bytestring=open(svg_path, 'rb').read(), write_to=png_path
     )
     return

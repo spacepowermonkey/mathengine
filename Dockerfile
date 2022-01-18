@@ -12,3 +12,4 @@ RUN pip3 install colorcet
 
 COPY src /srv/mathengine
 COPY demo /srv/demo
+COPY papers /srv/papers

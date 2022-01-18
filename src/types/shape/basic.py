@@ -9,18 +9,18 @@ class Shape(object):
 
 
     def cell(self, dimension : int):
-        cell = self.model.object(dimension)
-        self.model.arrow(cell.key, cell.key, ArrowType.equality)
+        cell = self.model.Obj(dimension)
+        self.model.Arrow(cell.idx, cell.idx, ArrowType.equality)
         return cell
 
     def glue(self, a, b):
-        self.model.arrow(a.key, b.key, ArrowType.inclusion)
-        self.model.arrow(b.key, a.key, ArrowType.restriction)
+        self.model.Arrow(a.idx, b.idx, ArrowType.inclusion)
+        self.model.Arrow(b.idx, a.idx, ArrowType.restriction)
         return
 
     def equate(self, a, b):
-        self.model.arrow(a.key, b.key, ArrowType.equality)
-        self.model.arrow(b.key, a.key, ArrowType.equality)
+        self.model.Arrow(a.idx, b.idx, ArrowType.equality)
+        self.model.Arrow(b.idx, a.idx, ArrowType.equality)
         return
     
 
@@ -30,20 +30,20 @@ class Shape(object):
         # For every object in our model, copy it over.
         for obj in self.model.objects():
             result_data = data_update(obj.data) if data_update is not None else obj.data
-            result.model.object(result_data)
+            result.model.Obj(result_data)
         for obj in other.model.objects():
             result_data = data_update(obj.data) if data_update is not None else obj.data
-            result.model.object(result_data)
+            result.model.Obj(result_data)
 
         # Copy the arrows, with offset for the second model.
         for arr in self.model.arrows():
-            result.model.arrow(
+            result.model.Arrow(
                 arr.start, 
                 arr.end, 
                 arr.data
             )
-        for arr in other.arrows():
-            result.model.arrow(
+        for arr in other.model.arrows():
+            result.model.Arrow(
                 arr.start + self.model.size, 
                 arr.end + self.model.size, 
                 arr.data
@@ -56,14 +56,14 @@ class Shape(object):
 
         for obj in self.model.objects():
             # Add a copy shifted by that dimensionality for each cell.
-            result.__add__(other, data_update=lambda x: x + obj.data)
+            result = result.__add__(other, data_update=lambda x: x + obj.data)
         
         for arr in self.model.arrows():
             # Add an arrow between matched cells in end-blocks.
             d_start = arr.start * other.model.size
-            d_end = arr.start * other.model.size
+            d_end = arr.end * other.model.size
             for obj in other.model.objects():
-                result.model.arrow(obj.key + d_start, obj.key + d_end, obj.data)
+                result.model.Arrow(obj.idx + d_start, obj.idx + d_end, arr.data)
 
         return result
 
@@ -73,6 +73,36 @@ class Shape(object):
         for n in range(n):
             result = self * result
 
+        return result
+    
+    def __sub__(self, other):
+        result = Shape()
+        for obj in self.model.objects():
+            result.model.Obj(obj.data)
+        
+        for arr in self.model.arrows():
+            try:
+                other_arr = other.model.get(arr.start, arr.end) 
+
+                # If they exactly match, remove the arrow entirely.
+                if arr.data == other_arr.data:
+                    continue
+
+                # If the other arrow is of type EQ, then remove always.
+                if other_arr.data == ArrowType.equality:
+                    continue
+
+                # If self is equality and the other arrow exists, subtract.
+                if arr.data == ArrowType.equality and other_arr.data == ArrowType.inclusion:
+                    result.model.Arrow(arr.start, arr.end, ArrowType.restriction)
+                if arr.data == ArrowType.equality and other_arr.data == ArrowType.restriction:
+                    result.model.Arrow(arr.start, arr.end, ArrowType.inclusion)
+            
+            # If the arrow is NONE or doesn't exist, copy the self arrow to the result.
+            except KeyError:
+                pass
+            result.model.Arrow(arr.start, arr.end, arr.data)
+        
         return result
 
 
@@ -90,8 +120,8 @@ class Interval(Shape):
         super().__init__()
 
         self.start = self.cell(0)
-        self.end = self.cell(0)
         self.middle = self.cell(1)
+        self.end = self.cell(0)
 
         self.glue(self.start, self.middle)
         self.glue(self.end, self.middle)
@@ -103,8 +133,8 @@ class Loop(Shape):
         super().__init__()
 
         self.start = self.cell(0)
-        self.end = self.cell(0)
         self.middle = self.cell(1)
+        self.end = self.cell(0)
 
         self.glue(self.start, self.middle)
         self.glue(self.end, self.middle)
