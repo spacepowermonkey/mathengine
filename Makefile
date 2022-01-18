@@ -12,6 +12,7 @@ docker-mathengine:
 
 
 
+####	D E M O S
 demo-5cubes: docker-mathengine
 	echo "\n\nSTARTING MATH ENGINE\n\n"
 
@@ -23,6 +24,9 @@ demo-5cubes: docker-mathengine
 
 	echo "\n\nEXECUTION SUCCESSFUL!\n\n"
 
+
+
+####	P A P E R S
 paper_shapes_as_di: docker-mathengine
 	echo "\n\nSTARTING MATH ENGINE\n\n"
 
