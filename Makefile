@@ -37,3 +37,15 @@ paper_shapes_as_di: docker-mathengine
 	docker cp -a mathengine:/data/ ./render/
 
 	echo "\n\nEXECUTION SUCCESSFUL!\n\n"
+
+paper_shapes_have_ops: docker-mathengine
+	echo "\n\nSTARTING MATH ENGINE\n\n"
+
+	docker run --name mathengine \
+	--mount type=volume,src=mathengine-data,dst="/data" \
+	zmgsabstract/mathengine python3 -m papers.shapes_have_operations
+
+	docker cp -a mathengine:/data/ ./render/
+
+	echo "\n\nEXECUTION SUCCESSFUL!\n\n"
+
