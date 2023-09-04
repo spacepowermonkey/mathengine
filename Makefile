@@ -8,7 +8,7 @@ clean:
 
 
 docker-mathengine:
-	docker build -t zmgsabstract/mathengine .
+	docker build -t spacepowermonkey/mathengine .
 
 
 
@@ -18,7 +18,18 @@ demo-5cubes: docker-mathengine
 
 	docker run --name mathengine \
 	--mount type=volume,src=mathengine-data,dst="/data" \
-	zmgsabstract/mathengine python3 -m demo.render_5_cubes
+	spacepowermonkey/mathengine python3 -m demo.render_5_cubes
+
+	docker cp -a mathengine:/data/ ./render/
+
+	echo "\n\nEXECUTION SUCCESSFUL!\n\n"
+
+demo-5cyclics: docker-mathengine
+	echo "\n\nSTARTING MATH ENGINE\n\n"
+
+	docker run --name mathengine \
+	--mount type=volume,src=mathengine-data,dst="/data" \
+	spacepowermonkey/mathengine python3 -m demo.render_5_cyclics
 
 	docker cp -a mathengine:/data/ ./render/
 
@@ -32,7 +43,7 @@ paper_shapes_as_di: docker-mathengine
 
 	docker run --name mathengine \
 	--mount type=volume,src=mathengine-data,dst="/data" \
-	zmgsabstract/mathengine python3 -m papers.shapes_as_digital_images
+	spacepowermonkey/mathengine python3 -m papers.shapes_as_digital_images
 
 	docker cp -a mathengine:/data/ ./render/
 
@@ -43,7 +54,7 @@ paper_shapes_have_ops: docker-mathengine
 
 	docker run --name mathengine \
 	--mount type=volume,src=mathengine-data,dst="/data" \
-	zmgsabstract/mathengine python3 -m papers.shapes_have_operations
+	spacepowermonkey/mathengine python3 -m papers.shapes_have_operations
 
 	docker cp -a mathengine:/data/ ./render/
 

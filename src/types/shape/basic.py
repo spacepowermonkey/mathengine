@@ -1,4 +1,4 @@
-from ...model import ArrowType, Model
+from ...other import ArrowType, Model
 
 
 
