@@ -1,4 +1,4 @@
-from ...other import ArrowType, Model
+from ...model import ArrowType, Model
 
 
 
@@ -22,8 +22,8 @@ class Group(object):
         x = self.model.Obj(data)
         self.elements.append(x)
         self.model.Arrow(x.idx, x.idx, ArrowType.equality)
-        self.model.Arrow(self.star.idx, x.idx, ArrowType.inclusion)
-        self.model.Arrow(x.idx, self.star.idx, ArrowType.inclusion)
+        self.model.Arrow(self.star.idx, x.idx, ArrowType.equivalence)
+        self.model.Arrow(x.idx, self.star.idx, ArrowType.equivalence)
         return x
     
     def pair(self, data=None):
@@ -50,12 +50,17 @@ def make_n_cyclic(n):
             cyclic_group.model.Arrow(x.idx, xy.idx, ArrowType.inclusion)
             cyclic_group.model.Arrow(y.idx, xy.idx, ArrowType.inclusion)
             cyclic_group.model.Arrow(xy.idx, z.idx, ArrowType.inclusion)
+
+            cyclic_group.model.Arrow(xy.idx, x.idx, ArrowType.restriction)
+            cyclic_group.model.Arrow(xy.idx, y.idx, ArrowType.restriction)
+            cyclic_group.model.Arrow(z.idx, xy.idx, ArrowType.restriction)
+
     
     pair_count = len(cyclic_group.pairs)
     for i in range(pair_count):
         for j in range(i, pair_count):
             if cyclic_group.pairs[i].data == cyclic_group.pairs[j].data:
-                cyclic_group.model.Arrow(cyclic_group.pairs[i].idx, cyclic_group.pairs[j].idx, ArrowType.equality)
-                cyclic_group.model.Arrow(cyclic_group.pairs[j].idx, cyclic_group.pairs[i].idx, ArrowType.equality)
+                cyclic_group.model.Arrow(cyclic_group.pairs[i].idx, cyclic_group.pairs[j].idx, ArrowType.equivalence)
+                cyclic_group.model.Arrow(cyclic_group.pairs[j].idx, cyclic_group.pairs[i].idx, ArrowType.equivalence)
     
     return cyclic_group

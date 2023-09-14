@@ -1,5 +1,3 @@
-import numpy
-
 from dataclasses import dataclass
 from typing import Any
 
@@ -23,73 +21,7 @@ class ArrowType:
     equality    : int = 1
     inclusion   : int = 2
     restriction : int = 3
-
-
-
-class Tile:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-        self._data = numpy.zeros((Image.STRIDE, Image.STRIDE), dtype=numpy.byte)
-        return
-
-    def __setitem__(self, key, item):
-        self._data[key] = item
-    
-    def __getitem__(self, key):
-        return self._data[key]
-
-
-class Image:
-    STRIDE = 64
-
-    def __init__(self):
-        self._tiles = {}
-        return
-    
-    def mark(self, x, y, data):
-        bx = x // Image.STRIDE
-        by = y // Image.STRIDE
-
-        dx = x % Image.STRIDE
-        dy = y % Image.STRIDE
-
-        try:
-            tile = self._tiles[(bx,by)]
-        except KeyError:
-            tile = Tile(bx, by)
-            self._tiles[(bx,by)] = tile
-        tile[dx,dy] = data
-        return
-    
-    def to_arrows(self):
-        arrows = []
-        tiles = self._tiles.values()
-        for tile in tiles:
-            dx = tile.x * Image.STRIDE
-            dy = tile.y * Image.STRIDE
-            for x in range(Image.STRIDE):
-                for y in range(Image.STRIDE):
-                    data = tile[x,y]
-                    if data == ArrowType.NONE:
-                        continue
-                    arrows.append(
-                        Arrow(x+dx, y+dy, data)
-                    )
-        return arrows
-
-
-    def __getitem__(self, key):
-        x = key[0]
-        y = key[1]
-
-        bx = x // Image.STRIDE
-        by = y // Image.STRIDE
-        dx = x % Image.STRIDE
-        dy = y % Image.STRIDE
-
-        return self._tiles[(bx,by)][dx,dy]
+    equivalence : int = 5 # -- because it's 2+3
 
 
 
@@ -99,7 +31,7 @@ class Model:
         self._objs = []
 
         self.complexity = 0
-        self._image = Image()
+        self._arrows = {}
         return
     
 
@@ -110,20 +42,49 @@ class Model:
         return new_obj
     
     def Arrow(self, start, end, data):
-        self._image.mark(start, end, data)
-        self.complexity += 1
-        return Arrow(start, end, data)
+        new_arr = Arrow(start, end, data)
+
+        try:
+            current_arr = self._arrows[start][end]
+
+            if (
+                new_arr.data == ArrowType.inclusion and current_arr.data == ArrowType.restriction
+            ) or (
+                new_arr.data == ArrowType.restriction and current_arr.data == ArrowType.inclusion
+            ) or (
+                new_arr.data == ArrowType.equivalence or current_arr.data == ArrowType.equivalence
+            ):
+                new_arr.data = ArrowType.equivalence
+            
+            if current_arr.data == ArrowType.equality:
+                new_arr.data = ArrowType.equality
+        except KeyError:
+            current_arr = None
+            self.complexity += 1
+        
+        try:
+            self._arrows[start][end] = new_arr
+        except KeyError:
+            self._arrows[start] = {end : new_arr}
+        
+        return new_arr
 
 
-    def get(self, x, y=None):
-        if y is None:
-            return self._objs[x]
+    def get(self, x1, x2=None):
+        if x2 is None:
+            return self._objs[x1]
         else:
-            return self._image[(x,y)]
+            return self._arrows[x1][x2]
 
 
     def objects(self):
         return self._objs
 
+
+    def _make_arrow_gen(self):
+        for row, cols in self._arrows.items():
+            for col, arrow in cols.items():
+                yield arrow
+
     def arrows(self):
-        return self._image.to_arrows()
+        return self._make_arrow_gen()
