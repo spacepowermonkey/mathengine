@@ -1,4 +1,5 @@
 from ...model import ArrowType, Model
+from .struct import Struct
 
 
 
@@ -31,6 +32,37 @@ class Group(object):
         self.pairs.append(xy)
         self.model.Arrow(xy.idx, xy.idx, ArrowType.equality)
         return xy
+    
+
+    def __mul__(self, other):
+        prod_group = Group()
+        
+        m = len(self.elements)
+        n = len(other.elements)
+        k = m*n
+
+        for i in range(k):
+            prod_group.element(i)
+        
+        def prod_op(a, b):
+            a_1 = a.data // n
+            a_2 = a.data % n
+
+            b_1 = b.data // n
+            b_2 = b.data % n
+
+            c_1 = self.model.get(1 + m + m*a_1 + b_1).data.data
+            c_2 = other.model.get(1 + n + n*a_2 + b_2).data.data
+
+            c = n * c_1 + c_2
+
+            return c
+
+        Struct.build_op(prod_group, prod_op)
+
+        Struct.build_levels(prod_group, lambda a, b: a.data == b.data )
+
+        return prod_group
 
 
 
@@ -40,27 +72,8 @@ def make_n_cyclic(n):
     for i in range(n):
         cyclic_group.element(i)
 
-    for x in cyclic_group.elements:
-        for y in cyclic_group.elements:
-            z = (x.data + y.data) % n
-            z = cyclic_group.elements[z]
-            
-            xy = cyclic_group.pair(z)
-
-            cyclic_group.model.Arrow(x.idx, xy.idx, ArrowType.inclusion)
-            cyclic_group.model.Arrow(y.idx, xy.idx, ArrowType.inclusion)
-            cyclic_group.model.Arrow(xy.idx, z.idx, ArrowType.inclusion)
-
-            cyclic_group.model.Arrow(xy.idx, x.idx, ArrowType.restriction)
-            cyclic_group.model.Arrow(xy.idx, y.idx, ArrowType.restriction)
-            cyclic_group.model.Arrow(z.idx, xy.idx, ArrowType.restriction)
-
+    Struct.build_op(cyclic_group, lambda a, b: (a.data + b.data) % n)
     
-    pair_count = len(cyclic_group.pairs)
-    for i in range(pair_count):
-        for j in range(i, pair_count):
-            if cyclic_group.pairs[i].data == cyclic_group.pairs[j].data:
-                cyclic_group.model.Arrow(cyclic_group.pairs[i].idx, cyclic_group.pairs[j].idx, ArrowType.equivalence)
-                cyclic_group.model.Arrow(cyclic_group.pairs[j].idx, cyclic_group.pairs[i].idx, ArrowType.equivalence)
+    Struct.build_levels(cyclic_group, lambda a, b: a.data == b.data)
     
     return cyclic_group

@@ -6,15 +6,15 @@ from mathengine.tools.render.fancy_ring import render as ring_render
 
 
 
-START = 51
-STOP = START + 41
-STRIDE = 10
+START = 5
+STOP = START + 4
+STRIDE = 1
 
 def main(start, stop, stride):
     for i in range(start, stop, stride):
-        group = make_n_group(i)
-        group_model = group.model
-        group_render(group_model, f"z{i}-group", "/data", len(group.elements))
+        # group = make_n_group(i)
+        # group_model = group.model
+        # group_render(group_model, f"z{i}-group", "/data", len(group.elements))
 
         ring = make_n_ring(i)
         ring_model = ring.model

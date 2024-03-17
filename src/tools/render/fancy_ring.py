@@ -66,17 +66,17 @@ class RingStructure:
 
 def split_to_submatrices(rows, cols, cs, group_size):
     structure = RingStructure(
-        RingRegion([],[],[]),
+        RingRegion([],[],[]), # Element structure
 
-        RingRegion([],[],[]),
-        RingRegion([],[],[]),
-        RingRegion([],[],[]),
+        RingRegion([],[],[]), # Addition pairs
+        RingRegion([],[],[]), # Addition outputs
+        RingRegion([],[],[]), # Addition levels
 
-        RingRegion([],[],[]),
-        RingRegion([],[],[]),
-        RingRegion([],[],[]),
+        RingRegion([],[],[]), # Multiplication pairs
+        RingRegion([],[],[]), # Multiplication outputs
+        RingRegion([],[],[]), # Multiplication levels
 
-        RingRegion([],[],[]),
+        RingRegion([],[],[]), # Log structures
         RingRegion([],[],[])
     )
 
@@ -123,9 +123,19 @@ def configure_text_ax(ax):
     return
 
 def build_title_and_text(fig, grid, name):
-    ax_title = fig.add_subplot(grid[0,:])
+    ax_title = fig.add_subplot(grid[0,:3])
     ax_title.text(0.1, 0.5, f"{name}", fontsize='xx-large', va='center', ha='center')
     configure_text_ax(ax_title)
+
+    ax_legend = fig.add_subplot(grid[0:1, 3])
+    legend_elements = [
+        matplotlib.lines.Line2D([0], [0], marker='o', color='w', markersize=15, label='Equality', markerfacecolor=f'{ARROW_COLORS[ArrowType.equality]}'),
+        matplotlib.lines.Line2D([0], [0], marker='o', color='w', markersize=15, label='Inclusion', markerfacecolor=f'{ARROW_COLORS[ArrowType.inclusion]}'),
+        matplotlib.lines.Line2D([0], [0], marker='o', color='w', markersize=15, label='Restriction', markerfacecolor=f'{ARROW_COLORS[ArrowType.restriction]}'),
+        matplotlib.lines.Line2D([0], [0], marker='o', color='w', markersize=15, label='Equivalence', markerfacecolor=f'{ARROW_COLORS[ArrowType.equivalence]}'),
+    ]
+    ax_legend.legend(title="Arrow Types", handles=legend_elements, loc='lower left', frameon=False, bbox_to_anchor=(-0.2,-1))
+    configure_text_ax(ax_legend)
 
     ax_elements_in = fig.add_subplot(grid[1,0])
     ax_elements_in.text(0.5, 0.5, f"IN: elm", fontsize='large', va='center', ha='center')
@@ -150,6 +160,7 @@ def build_title_and_text(fig, grid, name):
     ax_mult_pairs_out = fig.add_subplot(grid[4,3])
     ax_mult_pairs_out.text(0.5, 0.5, f"OUT: mult(,)", fontsize='large', va='center', ha='center')
     configure_text_ax(ax_mult_pairs_out)
+
     return
 
 
@@ -199,10 +210,8 @@ def render(model, name, path, group_size):
         } for j in range(3)]
     for i in range(3)]
 
-    print(bounds)
-
-    fig_width = 20
-    fig_height = 20
+    fig_width = 30
+    fig_height = 30
     fig_scale = 0.95
     widths = [fig_scale * r for r in ratios] + [0.05]
     heights = [0.03, 0.02] + [fig_scale * r for r in ratios]

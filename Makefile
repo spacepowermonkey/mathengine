@@ -35,6 +35,28 @@ demo-5cyclics: docker-mathengine
 
 	echo "\n\nEXECUTION SUCCESSFUL!\n\n"
 
+demo-64elms: docker-mathengine
+	echo "\n\nSTARTING MATH ENGINE\n\n"
+
+	docker run --name mathengine \
+	--mount type=volume,src=mathengine-data,dst="/data" \
+	spacepowermonkey/mathengine python3 -m demo.render_64_elm_groups
+
+	docker cp -a mathengine:/data/ ./render/
+
+	echo "\n\nEXECUTION SUCCESSFUL!\n\n"
+
+demo-4422perms: docker-mathengine
+	echo "\n\nSTARTING MATH ENGINE\n\n"
+
+	docker run --name mathengine \
+	--mount type=volume,src=mathengine-data,dst="/data" \
+	spacepowermonkey/mathengine python3 -m demo.render_4422_permutations
+
+	docker cp -a mathengine:/data/ ./render/
+
+	echo "\n\nEXECUTION SUCCESSFUL!\n\n"
+
 
 
 ####	P A P E R S
